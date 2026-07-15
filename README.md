@@ -459,3 +459,82 @@ Durante la validación del proyecto se comprobó correctamente:
 
 - la respuesta HTTP 200 del endpoint `GET /health` desde el entorno contenerizado.
  
+
+ ## Resultados del modelo
+ 
+Para respetar el orden temporal de los datos financieros, se realizó una división temporal entre los conjuntos de entrenamiento y prueba.
+ 
+- Fecha de corte: `2024-10-17`
+
+- Registros de entrenamiento: `3.588`
+
+- Registros de prueba: `900`
+ 
+Se entrenaron y compararon dos modelos de clasificación: Random Forest y Logistic Regression.
+ 
+### Random Forest
+ 
+| Métrica | Resultado |
+
+|---|---:|
+
+| Accuracy | 0.5000 |
+
+| Precision | 0.5621 |
+
+| Recall | 0.3862 |
+
+| F1-score | 0.4578 |
+
+| ROC-AUC | 0.5141 |
+ 
+### Logistic Regression
+ 
+| Métrica | Resultado |
+
+|---|---:|
+
+| Accuracy | 0.4911 |
+
+| Precision | 0.5612 |
+
+| Recall | 0.3171 |
+
+| F1-score | 0.4052 |
+
+| ROC-AUC | 0.5036 |
+ 
+El modelo seleccionado fue `RandomForestClassifier`, al obtener el mayor valor de ROC-AUC entre los modelos evaluados.
+ 
+## Limitaciones del modelo
+ 
+Los resultados obtenidos muestran una capacidad predictiva limitada y cercana a una clasificación aleatoria. Esto refleja la dificultad de predecir movimientos diarios del mercado financiero utilizando únicamente información histórica y variables técnicas simples.
+ 
+El objetivo principal del proyecto no es obtener un modelo con alto rendimiento financiero, sino demostrar la implementación de un flujo reproducible de Machine Learning y MLOps que incluye:
+ 
+- ingesta y almacenamiento local de datos;
+
+- ingeniería de variables;
+
+- entrenamiento y evaluación de modelos;
+
+- serialización del modelo;
+
+- almacenamiento de métricas y metadatos;
+
+- generación de predicciones;
+
+- exposición del modelo mediante una API REST;
+
+- validación mediante pruebas automatizadas;
+
+- ejecución reproducible mediante Docker.
+ 
+El desempeño del modelo podría mejorarse en trabajos futuros mediante la incorporación de nuevas fuentes de información, variables adicionales, técnicas de selección de características, ajuste de hiperparámetros y estrategias de validación temporal más avanzadas.
+ 
+## Advertencia de uso
+ 
+Este proyecto fue desarrollado exclusivamente con fines académicos y educativos.
+ 
+Las predicciones generadas por el modelo no constituyen asesoría financiera ni representan una recomendación de compra, venta o conservación de activos. Los resultados no deben utilizarse como único criterio para tomar decisiones de inversión.
+ 
