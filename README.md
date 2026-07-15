@@ -193,3 +193,269 @@ La aplicación estará disponible en:
 - API: `http://127.0.0.1:8000`
 - Swagger UI: `http://127.0.0.1:8000/docs`
 - ReDoc: `http://127.0.0.1:8000/redoc`
+
+
+## Endpoints de la API
+ 
+La aplicación expone una API REST desarrollada con FastAPI para consultar el estado del servicio, acceder a información del modelo, consultar datos financieros y generar predicciones.
+ 
+### Estado del servicio
+ 
+`GET /health`
+ 
+Permite verificar que la API esté disponible y que los artefactos del modelo puedan cargarse correctamente.
+ 
+Ejemplo de respuesta:
+ 
+```json
+
+{
+
+  "status": "ok",
+
+  "model_loaded": true
+
+}
+
+```
+ 
+### Metadatos del modelo
+ 
+`GET /model/metadata`
+ 
+Devuelve información técnica y descriptiva del modelo entrenado, incluyendo:
+ 
+- nombre y versión del modelo;
+
+- fecha de entrenamiento;
+
+- activos soportados;
+
+- variables utilizadas;
+
+- métricas de evaluación;
+
+- horizonte de predicción;
+
+- advertencia sobre el uso del modelo.
+ 
+### Datos de mercado
+ 
+`GET /market-data/{symbol}`
+ 
+Devuelve la información financiera más reciente disponible para el activo solicitado.
+ 
+Ejemplo de solicitud:
+ 
+```text
+
+GET /market-data/AAPL
+
+```
+ 
+La respuesta incluye:
+ 
+- símbolo del activo;
+
+- fecha del registro;
+
+- precio de cierre;
+
+- retorno diario;
+
+- medias móviles de 5 y 10 días;
+
+- volatilidad de 5 días;
+
+- fuente de los datos.
+ 
+### Generación de predicciones
+ 
+`POST /predict`
+ 
+Genera una predicción sobre la tendencia del precio del activo para el siguiente día.
+ 
+Ejemplo de solicitud:
+ 
+```json
+
+{
+
+  "symbol": "AAPL"
+
+}
+
+```
+ 
+Ejemplo de respuesta:
+ 
+```json
+
+{
+
+  "symbol": "AAPL",
+
+  "prediction": "down",
+
+  "prediction_class": 0,
+
+  "probability_up": 0.4069,
+
+  "model_name": "RandomForestClassifier",
+
+  "model_version": "randomforestclassifier_v1",
+
+  "prediction_horizon": "next_day",
+
+  "data_date": "2025-12-29",
+
+  "data_source": "cached",
+
+  "disclaimer": "Modelo desarrollado con fines educativos. No constituye asesoría financiera."
+
+}
+
+```
+ 
+Los símbolos soportados actualmente son:
+ 
+- `AAPL`
+
+- `MSFT`
+
+- `GOOGL`
+ 
+### Documentación interactiva
+ 
+Con la API en ejecución, FastAPI genera automáticamente documentación interactiva:
+ 
+- Swagger UI: `http://127.0.0.1:8000/docs`
+
+- ReDoc: `http://127.0.0.1:8000/redoc`
+ 
+
+ ## Pruebas automatizadas
+ 
+El proyecto utiliza `pytest` y `FastAPI TestClient` para validar automáticamente el funcionamiento de los principales endpoints de la API.
+ 
+Para ejecutar las pruebas:
+ 
+```bash
+
+poetry run pytest tests/test_api.py -v
+
+```
+ 
+Actualmente se incluyen pruebas para:
+ 
+- verificar la respuesta HTTP 200 del endpoint `GET /health`;
+
+- validar la estructura de la respuesta del estado del servicio;
+
+- verificar el endpoint `GET /model/metadata`;
+
+- validar la estructura de los metadatos del modelo;
+
+- verificar la consulta de datos mediante `GET /market-data/AAPL`;
+
+- validar la estructura de los datos de mercado;
+
+- verificar la generación de predicciones mediante `POST /predict`;
+
+- validar la estructura de la respuesta de predicción;
+
+- comprobar el rechazo de símbolos no soportados en `POST /predict`;
+
+- comprobar la respuesta HTTP 404 para símbolos no disponibles en los datos de mercado.
+ 
+### Resultado de las pruebas
+ 
+La ejecución actual del conjunto de pruebas obtuvo:
+ 
+```text
+
+10 passed
+
+0 failed
+
+```
+ 
+Las advertencias mostradas durante la ejecución corresponden a dependencias externas y no afectan el resultado de las pruebas ni el funcionamiento actual de la API.
+ 
+
+ ## Ejecución con Docker
+ 
+El proyecto puede ejecutarse dentro de un contenedor Docker, lo que permite disponer de un entorno aislado y reproducible con las dependencias necesarias para ejecutar la API.
+ 
+### Construir la imagen
+ 
+Desde la raíz del proyecto, ejecutar:
+ 
+```bash
+
+docker build -t financial-api .
+
+```
+ 
+Este comando construye una imagen llamada:
+ 
+```text
+
+financial-api:latest
+
+```
+ 
+La imagen incluye:
+ 
+- Python 3.12;
+
+- dependencias principales del proyecto;
+
+- código fuente de la aplicación;
+
+- modelo entrenado y sus metadatos;
+
+- dataset procesado requerido por la API.
+ 
+### Ejecutar el contenedor
+ 
+Una vez construida la imagen:
+ 
+```bash
+
+docker run --rm -p 8000:8000 financial-api
+
+```
+ 
+La opción `-p 8000:8000` conecta el puerto 8000 del contenedor con el puerto 8000 del equipo local.
+ 
+La API estará disponible en:
+ 
+- API: `http://127.0.0.1:8000`
+
+- Swagger UI: `http://127.0.0.1:8000/docs`
+
+- ReDoc: `http://127.0.0.1:8000/redoc`
+ 
+### Detener el contenedor
+ 
+Si el contenedor se está ejecutando en primer plano, puede detenerse mediante:
+ 
+```text
+
+Ctrl + C
+
+```
+ 
+Durante la validación del proyecto se comprobó correctamente:
+ 
+- la construcción de la imagen `financial-api`;
+
+- el inicio del contenedor;
+
+- la ejecución de FastAPI mediante Uvicorn;
+
+- el acceso a la documentación interactiva;
+
+- la respuesta HTTP 200 del endpoint `GET /health` desde el entorno contenerizado.
+ 
