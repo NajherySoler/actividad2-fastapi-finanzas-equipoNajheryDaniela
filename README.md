@@ -7,7 +7,7 @@ El proyecto implementa un flujo completo de Machine Learning para la predicción
 ## Integrantes
 
 - Najhery Soler
-- Laura
+- Laura Medina
 
 ## Objetivo del proyecto
 
