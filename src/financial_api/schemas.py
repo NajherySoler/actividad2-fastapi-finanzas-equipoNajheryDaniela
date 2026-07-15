@@ -148,3 +148,78 @@ class HealthResponse(BaseModel):
         description="Indica si el modelo entrenado está disponible.",
         examples=[True],
     )
+
+class MarketDataResponse(BaseModel):
+
+    """Información financiera más reciente de un activo."""
+ 
+    symbol: str = Field(
+
+        ...,
+
+        description="Símbolo del activo financiero.",
+
+        examples=["AAPL"],
+
+    )
+ 
+    date: str = Field(
+
+        ...,
+
+        description="Fecha del registro financiero.",
+
+        examples=["2025-12-29"],
+
+    )
+ 
+    close: float = Field(
+
+        ...,
+
+        description="Precio de cierre del activo.",
+
+    )
+ 
+    daily_return: float = Field(
+
+        ...,
+
+        description="Retorno diario del precio de cierre.",
+
+    )
+ 
+    moving_average_5: float = Field(
+
+        ...,
+
+        description="Media móvil del precio de cierre de los últimos 5 días.",
+
+    )
+ 
+    moving_average_10: float = Field(
+
+        ...,
+
+        description="Media móvil del precio de cierre de los últimos 10 días.",
+
+    )
+ 
+    volatility_5: float = Field(
+
+        ...,
+
+        description="Volatilidad calculada en una ventana de 5 días.",
+
+    )
+ 
+    data_source: str = Field(
+
+        ...,
+
+        description="Origen de los datos utilizados.",
+
+        examples=["cached"],
+
+    )
+ 
