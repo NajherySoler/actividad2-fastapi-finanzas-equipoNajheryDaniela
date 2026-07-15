@@ -4,6 +4,7 @@ from fastapi import FastAPI, HTTPException
  
 from financial_api.predict import (
     load_metadata,
+    load_model,
     load_processed_data,
     predict_symbol,
 )
@@ -34,6 +35,7 @@ app = FastAPI(
 def health_check() -> HealthResponse:
     """Verifica que la API y el modelo estén disponibles."""
     try:
+        load_model()
         load_metadata()
  
         return HealthResponse(
