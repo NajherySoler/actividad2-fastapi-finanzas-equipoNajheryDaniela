@@ -1,0 +1,10 @@
+services:
+  financial-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: financial-api:local
+    container_name: financial-api
+    ports:
+      - "8000:8000"
+    restart: unless-stopped

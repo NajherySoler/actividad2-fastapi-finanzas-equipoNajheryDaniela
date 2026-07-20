@@ -538,3 +538,24 @@ Este proyecto fue desarrollado exclusivamente con fines académicos y educativos
  
 Las predicciones generadas por el modelo no constituyen asesoría financiera ni representan una recomendación de compra, venta o conservación de activos. Los resultados no deben utilizarse como único criterio para tomar decisiones de inversión.
  
+
+ ## Ejecución con Docker Compose
+
+El proyecto incluye un archivo `compose.yaml` para construir y ejecutar la API mediante Docker Compose.
+
+### Construir e iniciar el servicio
+
+```bash
+docker compose up --build
+```
+
+La API estará disponible en:
+
+- http://localhost:8000
+- http://localhost:8000/docs
+
+### Detener el servicio
+
+```bash
+docker compose down
+```
